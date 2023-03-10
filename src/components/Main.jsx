@@ -29,30 +29,28 @@ export default function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardCl
   }, []);
 
   return (
-    <>
-      <main>
-        <section className="profile">
-          <div className="profile__wrapper-avatar">
-            <img className="profile__img-avatar" alt="Аватар" src={userAvatar} />
-            <button className="profile__edit-avatar" type="button" onClick={onEditAvatar}></button>
+    <main>
+      <section className="profile">
+        <div className="profile__wrapper-avatar">
+          <img className="profile__img-avatar" alt="Аватар" src={userAvatar} />
+          <button className="profile__edit-avatar" type="button" onClick={onEditAvatar}></button>
+        </div>
+        <div className="profile__info">
+          <div className="profile__wrapper">
+            <h1 className="profile__name">{userName}</h1>
+            <button className="profile__edit-btn" type="button" onClick={onEditProfile}></button>
           </div>
-          <div className="profile__info">
-            <div className="profile__wrapper">
-              <h1 className="profile__name">{userName}</h1>
-              <button className="profile__edit-btn" type="button" onClick={onEditProfile}></button>
-            </div>
-            <p className="profile__profession">{userDescription}</p>
-          </div>
-          <button className="profile__add-btn" type="button" onClick={onAddPlace}></button>
-        </section>
-        <section className="gallery">
-          <ul className="gallery__cards">
-            {cardList.map((card) => (
-              <Card key={card._id} card={card} onCardClick={onCardClick} />
-            ))}
-          </ul>
-        </section>
-      </main>
-    </>
+          <p className="profile__profession">{userDescription}</p>
+        </div>
+        <button className="profile__add-btn" type="button" onClick={onAddPlace}></button>
+      </section>
+      <section className="gallery">
+        <ul className="gallery__cards">
+          {cardList.map((card) => (
+            <Card key={card._id} card={card} onCardClick={onCardClick} />
+          ))}
+        </ul>
+      </section>
+    </main>
   )
 }
