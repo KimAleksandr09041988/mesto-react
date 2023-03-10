@@ -10,7 +10,7 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState(null)
+  const [selectedCard, setSelectedCard] = React.useState(false)
 
   function handleIsEditProfilePopup() {
     setIsEditProfilePopupOpen(true)
@@ -29,13 +29,10 @@ function App() {
   }
 
   function closeAllPopups(e) {
-    if (e.target.classList.contains('popup_active') ||
-      e.target.classList.contains('popup__btn-close')) {
-      setIsEditProfilePopupOpen(false);
-      setIsAddPlacePopupOpen(false);
-      setIsEditAvatarPopupOpen(false)
-      setSelectedCard(null)
-    }
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsEditAvatarPopupOpen(false)
+    setSelectedCard(false)
   }
 
   return (
