@@ -5,12 +5,25 @@ import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import server from '../utils/Api';
+import { CurrentUserContext } from './contexts/CurrentUserContext';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({ name: '', link: '' })
+  const [selectedCard, setSelectedCard] = React.useState({ name: '', link: '' });
+  const [currentUser, setCurrentUser] = React.useState([]);
+
+  React.useEffect(() => {
+    server.getUserInfo()
+      .then(res => {
+        setCurrentUser(res)
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }, []);
 
   function handleIsEditProfilePopup() {
     setIsEditProfilePopupOpen(true)
@@ -36,7 +49,7 @@ function App() {
   }
 
   return (
-    <>
+    <CurrentUserContext.Provider value={currentUser}>
       <Header />
       <Main
         onEditProfile={handleIsEditProfilePopup}
@@ -78,7 +91,7 @@ function App() {
       </PopupWithForm>
 
       <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-    </>
+    </CurrentUserContext.Provider>
   );
 }
 
