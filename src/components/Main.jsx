@@ -5,8 +5,8 @@ import { CurrentUserContext } from "./contexts/CurrentUserContext";
 
 export default function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
   const [cardList, setCardList] = useState([]);
-  const translationUserContext = React.useContext(CurrentUserContext);
-  console.log(translationUserContext)
+  const userContext = React.useContext(CurrentUserContext);
+
   useEffect(() => {
     server.getCardInfo()
       .then(result => {
@@ -21,15 +21,15 @@ export default function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardCl
     <main>
       <section className="profile">
         <div className="profile__wrapper-avatar">
-          <img className="profile__img-avatar" alt="Аватар" src={translationUserContext.avatar} />
+          <img className="profile__img-avatar" alt="Аватар" src={userContext.avatar} />
           <button className="profile__edit-avatar" type="button" onClick={onEditAvatar}></button>
         </div>
         <div className="profile__info">
           <div className="profile__wrapper">
-            <h1 className="profile__name">{translationUserContext.name}</h1>
+            <h1 className="profile__name">{userContext.name}</h1>
             <button className="profile__edit-btn" type="button" onClick={onEditProfile}></button>
           </div>
-          <p className="profile__profession">{translationUserContext.about}</p>
+          <p className="profile__profession">{userContext.about}</p>
         </div>
         <button className="profile__add-btn" type="button" onClick={onAddPlace}></button>
       </section>
