@@ -36,6 +36,15 @@ function App() {
       .catch(err => console.log(err))
   }
 
+  function handleUpdateUser(obj) {
+    server.patchUserInfo(obj)
+      .then(data => {
+        setCurrentUser(data)
+        setIsEditProfilePopupOpen(false)
+      })
+      .catch(err => console.log(err))
+  }
+
   React.useEffect(() => {
     server.getUserInfo()
       .then(res => {
@@ -92,7 +101,7 @@ function App() {
       <Footer />
 
       {/* popup */}
-      <EditProfilePopup isOpen={isEditProfilePopupOpen} isClose={closeAllPopups} />
+      <EditProfilePopup isOpen={isEditProfilePopupOpen} isClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
       <PopupWithForm name='card' title='Новое место' textButton='Сохранить' isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}>
         <input id="cardName-input" className="form__input" name="name" type="text" minLength="2" maxLength="30"
           placeholder="Название" required />
