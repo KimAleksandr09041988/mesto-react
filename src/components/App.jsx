@@ -4,6 +4,7 @@ import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
+import EditProfilePopup from './EditProfilePopup';
 import ImagePopup from './ImagePopup';
 import server from '../utils/Api';
 import { CurrentUserContext } from './contexts/CurrentUserContext';
@@ -14,11 +15,39 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({ name: '', link: '' });
   const [currentUser, setCurrentUser] = React.useState([]);
+  const [cardList, setCardList] = React.useState([]);
+
+  function handleCardLike(card) {
+    const isLike = card.likes.some(i => i._id === currentUser._id);
+    server.changeLikeCardStatus(card._id, !isLike)
+      .then((newCard) => {
+        setCardList((state) =>
+          state.map((c) => (c._id === card._id ? newCard : c))
+        );
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
+  }
+
+  function handleCardDelete(card) {
+    server.deleteCardInfo(card._id)
+      .then(() => setCardList(state => state.filter(item => item._id !== card._id)))
+      .catch(err => console.log(err))
+  }
 
   React.useEffect(() => {
     server.getUserInfo()
       .then(res => {
         setCurrentUser(res)
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
+    server.getCardInfo()
+      .then(result => {
+        setCardList(result);
       })
       .catch(err => {
         console.log(err);
@@ -56,19 +85,14 @@ function App() {
         onAddPlace={handleIsAddPlacePopup}
         onEditAvatar={handleIsEditAvatarPopup}
         onCardClick={handleCardClick}
+        onCardLike={handleCardLike}
+        onCardDelete={handleCardDelete}
+        cardList={cardList}
       />
       <Footer />
 
       {/* popup */}
-      <PopupWithForm name='profile' title='Редактировать профиль' textButton='Сохранить' isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}>
-        <input id="fullName-input" className="form__input" name="name" type="text" minLength="2" maxLength="40"
-          placeholder="ФИО" required />
-        <span className="form__input-error fullName-input-error"></span>
-        <input id="profession-input" className="form__input" name="about" type="text" placeholder="Профессия"
-          minLength="2" maxLength="200" required />
-        <span className="form__input-error profession-input-error"></span>
-      </PopupWithForm>
-
+      <EditProfilePopup isOpen={isEditProfilePopupOpen} isClose={closeAllPopups} />
       <PopupWithForm name='card' title='Новое место' textButton='Сохранить' isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}>
         <input id="cardName-input" className="form__input" name="name" type="text" minLength="2" maxLength="30"
           placeholder="Название" required />
