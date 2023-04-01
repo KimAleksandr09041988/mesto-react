@@ -6,6 +6,7 @@ import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
+import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
 import server from '../utils/Api';
 import { CurrentUserContext } from './contexts/CurrentUserContext';
@@ -73,6 +74,15 @@ function App() {
       .catch()
   }
 
+  function handleAddPlaceSubmit(obj) {
+    server.addCardInfo(obj)
+      .then(newCard => {
+        setCardList([newCard, ...cardList]);
+        closeAllPopups();
+      })
+      .catch(err => console.log(err))
+  }
+
   function handleIsEditProfilePopup() {
     setIsEditProfilePopupOpen(true)
   }
@@ -115,19 +125,12 @@ function App() {
 
       <EditAvatarPopup isOpen={isEditAvatarPopupOpen} isClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
 
-
-      <PopupWithForm name='card' title='Новое место' textButton='Сохранить' isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}>
-        <input id="cardName-input" className="form__input" name="name" type="text" minLength="2" maxLength="30"
-          placeholder="Название" required />
-        <span className="form__input-error cardName-input-error"></span>
-        <input id="cardUrl-input" className="form__input" name="link" type="url" placeholder="Ссылка на картинку"
-          required />
-        <span className="form__input-error cardUrl-input-error"></span>
-      </PopupWithForm>
+      <AddPlacePopup isOpen={isAddPlacePopupOpen} isClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
 
 
 
-      <PopupWithForm name='delete' title='Вы уверены?' textButton='Да' onClose={closeAllPopups}>
+
+      <PopupWithForm name='delete' title='Вы уверены?' textButton='Да' isClose={closeAllPopups}>
         <input id="avatarUrl-input" className="form__input" name="avatar" type="url" placeholder="Ссылка на аватар"
           required />
         <span className="form__input-error avatarUrl-input-error"></span>
