@@ -1,5 +1,4 @@
 import React from 'react';
-import '../index.css';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -16,7 +15,7 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({ name: '', link: '' });
-  const [currentUser, setCurrentUser] = React.useState([]);
+  const [currentUser, setCurrentUser] = React.useState({});
   const [cardList, setCardList] = React.useState([]);
 
   React.useEffect(() => {
@@ -71,7 +70,7 @@ function App() {
         setCurrentUser(data);
         closeAllPopups();
       })
-      .catch()
+      .catch(err => console.log(err))
   }
 
   function handleAddPlaceSubmit(obj) {
